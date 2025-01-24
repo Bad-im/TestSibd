@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Sort</title>
+</head>
+<body>
+<h1>Bubble Sort</h1>
+<input type="text" id="arrayInput" placeholder="Введите числа через запятую">
+<button onclick="sortArray()">Сортировать</button>
+<h2>Результат:</h2>
+<pre id="result"></pre>
+<h2>Получить отсортированный массив по ID:</h2>
+<input type="text" id="sortId" placeholder="Введите ID">
+<button onclick="getSortedArray()">Получить по ID</button>
+<pre id="resultById"></pre>
+
+<script>
+    async function sortArray() {
+        const input = document.getElementById("arrayInput").value;
+        const array = input.split(',').map(Number);
+        const response = await fetch('/sort', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(array)
+        });
+        const result = await response.json();
+        document.getElementById("result").innerText = JSON.stringify(result);
+    }
+
+    async function getSortedArray() {
+        const id = document.getElementById("sortId").value;
+        const response = await fetch(`/sort/by-sort-id/${id}`);
+        const result = await response.json();
+        document.getElementById("resultById").innerText = JSON.stringify(result);
+    }
+</script>
+</body>
+</html>
